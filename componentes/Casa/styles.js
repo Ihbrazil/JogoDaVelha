@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
       width: 110,
       height: 110,
     },
+
+    marcadorJogador: {
+      fontSize: 60,
+    }
 });
 
 export default styles;

@@ -1,9 +1,8 @@
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import styles from './styles';
 
-export default function Casa({temBordaDireita = false,
-    temBordaInferior = false}) {
+export default function Casa({jogador = null,temBordaDireita = false, temBordaInferior = false}) {
     
     const larguraBordaDireita = (temBordaDireita) ? 3 : 0;
     const larguraBordaInferior = (temBordaInferior) ? 3 : 0;
@@ -13,6 +12,10 @@ export default function Casa({temBordaDireita = false,
             borderRightWidth: larguraBordaDireita,
             borderBottomWidth: larguraBordaInferior
         }]}>
+
+        <Text style={styles.marcadorJogador}>
+            {jogador}
+        </Text>
         
         </View>
     )
