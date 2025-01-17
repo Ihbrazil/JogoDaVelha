@@ -1,13 +1,20 @@
 import { useState} from "react";
-import { Pressable, View } from 'react-native';
+import { Pressable, View, Text, Button } from 'react-native';
 
 import Casa from '../Casa';
 import styles from './styles';
+
+import { verificaResultado } from "../../servicos/logica";
 
 export default function Game() {
 
     const [posicaoJogo, setPosicaoJogo] = useState(new Array(9));
     const [jogadorAtual, setJogadorAtual] = useState("X");
+
+    const [venceuJogo, setVenceuJogo] = useState(false);
+    const [empatouJogo, setEmpatouJogo] = useState(false);
+
+    const [posicaoVitoria, setPosicaoVitoria] = useState(new Array(9));
 
     function defineCasaEscolhida(casa) {
       let novoArrayPosicao = posicaoJogo;
@@ -21,17 +28,55 @@ export default function Game() {
     }
 
     function handleEscolheCasa(casa) {
-        if(posicaoJogo[casa] !== undefined)
+        if(posicaoJogo[casa] !== undefined || venceuJogo)
         {
             return;
         }
 
         defineCasaEscolhida(casa);
         defineJogadorAtual();
+
+        const resultado = verificaResultado(posicaoJogo);
+
+        setVenceuJogo(resultado.venceu);
+        setEmpatouJogo(resultado.empatou);
+        setPosicaoVitoria(resultado.posicaoVitoria);
+
+        return;
+    }
+
+    function handleReiniciarPartida() {
+        setJogadorAtual("X");
+        setPosicaoJogo(new Array(9));
+        setVenceuJogo(false);
+        setEmpatouJogo(false);
+        setPosicaoVitoria(new Array(9));
     }
 
     return (
         <View style={styles.container}>
+            <Text style={styles.titulo}>Jogo da Velha</Text>
+            <Text style={styles.status}>Jogador da vez: { jogadorAtual }</Text>
+            {
+                (venceuJogo) ?
+                <View style={styles.areaReinicio}>
+                    <Text style={styles.status}>Vitória!</Text>
+                </View>
+                : ""
+            }
+            {
+                (empatouJogo) ?
+                <View style={styles.areaReinicio}>
+                    <Text style={styles.status}>Empate!</Text>
+                </View>
+                : ""
+            }
+            {
+                (venceuJogo || empatouJogo) ?
+                <Button title='Reiniciar Partida' onPress={handleReiniciarPartida} />
+                : ""
+            }
+
             <View style={styles.tabuleiro}>
                 <View style={styles.linha}>
                     <Pressable onPress={() => handleEscolheCasa(0)}>
@@ -39,18 +84,21 @@ export default function Game() {
                             jogador={posicaoJogo[0]}
                             temBordaDireita={true}
                             temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[0]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(1)}>
                         <Casa
                             jogador={posicaoJogo[1]}
                             temBordaDireita={true} temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[1]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(2)}>
                         <Casa
                             jogador={posicaoJogo[2]}
                             temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[2]}
                         />
                     </Pressable>
                 </View>
@@ -60,18 +108,21 @@ export default function Game() {
                         <Casa
                             jogador={posicaoJogo[3]}
                             temBordaDireita={true} temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[3]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(4)}>
                         <Casa
                             jogador={posicaoJogo[4]}
                             temBordaDireita={true} temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[4]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(5)}>
                         <Casa
                             jogador={posicaoJogo[5]}
                             temBordaInferior={true}
+                            pecaVitoriosa={posicaoVitoria[5]}
                         />
                     </Pressable>
                 </View>
@@ -80,17 +131,20 @@ export default function Game() {
                         <Casa
                             jogador={posicaoJogo[6]}
                             temBordaDireita={true}
+                            pecaVitoriosa={posicaoVitoria[6]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(7)}>
                         <Casa
                             jogador={posicaoJogo[7]}
                             temBordaDireita={true}
+                            pecaVitoriosa={posicaoVitoria[7]}
                         />
                     </Pressable>
                     <Pressable onPress={() => handleEscolheCasa(8)}>
                         <Casa
                             jogador={posicaoJogo[8]}
+                            pecaVitoriosa={posicaoVitoria[8]}
                         />
                     </Pressable>
                 </View>

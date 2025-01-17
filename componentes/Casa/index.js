@@ -3,10 +3,13 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 
 export default function Casa({jogador = null,
-                              temBordaDireita = false, temBordaInferior = false})
+                              temBordaDireita = false, temBordaInferior = false,
+                              pecaVitoriosa = false})
 {
     const larguraBordaDireita = (temBordaDireita) ? 3 : 0;
     const larguraBordaInferior = (temBordaInferior) ? 3 : 0;
+
+    const corTexto = (pecaVitoriosa) ? "red" : "black";
 
     return(    
         <View style={[styles.coluna, {
@@ -14,7 +17,7 @@ export default function Casa({jogador = null,
             borderBottomWidth: larguraBordaInferior
         }]}>
 
-            <Text style={styles.marcadorJogador}>
+            <Text style={[styles.marcadorJogador, {color: corTexto}]}>
                 {jogador}
             </Text>
         
